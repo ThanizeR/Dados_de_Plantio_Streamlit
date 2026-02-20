@@ -20,7 +20,7 @@ import os
 from datetime import datetime
 from reportlab.lib.styles import ParagraphStyle
 import plotly.io as pio
-pio.kaleido.scope.mathjax = None
+pio.defaults.mathjax = None
 
 # Janelas reais de plantio por cultura
 janela_plantio = {
@@ -101,23 +101,15 @@ from reportlab.lib.pagesizes import A4
 
 def fundo_capa(canvas, doc):
     canvas.saveState()
-    canvas.drawImage(
-        "1.png",  # imagem da capa
-        0, 0,
-        width=A4[0],
-        height=A4[1]
-    )
+    if os.path.exists("1.png"):
+        canvas.drawImage("1.png", 0, 0, width=A4[0], height=A4[1])
     canvas.restoreState()
 
 
 def fundo_interno(canvas, doc):
     canvas.saveState()
-    canvas.drawImage(
-        "2.png",  # imagem páginas internas
-        0, 0,
-        width=A4[0],
-        height=A4[1]
-    )
+    if os.path.exists("2.png"):
+        canvas.drawImage("2.png", 0, 0, width=A4[0], height=A4[1])
     canvas.restoreState()
 
 
@@ -542,6 +534,9 @@ if org != "GERAL":
 if ano_sel != "TODOS":
     df_plantio = df_plantio[df_plantio["Ano_Safra"] == ano_sel]
 
+if df_plantio.empty:
+    st.warning("⚠️ Nenhum dado encontrado para o filtro selecionado.")
+    st.stop()
 
 st.subheader("Indicadores")
 
@@ -551,8 +546,14 @@ k1.metric(
     fmt_int(df_plantio["Área Semeada"].sum())
 )
 
-k2.metric("Primeiro Semeado", df_plantio["Primeiro Semeado"].min().strftime("%d/%m/%Y"))
-k3.metric("Última Semeadura", df_plantio["Última Semeadura"].max().strftime("%d/%m/%Y"))
+primeiro = df_plantio["Primeiro Semeado"].min()
+ultimo = df_plantio["Última Semeadura"].max()
+
+k2.metric("Primeiro Semeado",
+          primeiro.strftime("%d/%m/%Y") if pd.notna(primeiro) else "-")
+
+k3.metric("Última Semeadura",
+          ultimo.strftime("%d/%m/%Y") if pd.notna(ultimo) else "-")
 
 area_mes_ano = (
     df_plantio
