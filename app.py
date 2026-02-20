@@ -19,6 +19,8 @@ from reportlab.lib.units import cm
 import os
 from datetime import datetime
 from reportlab.lib.styles import ParagraphStyle
+import plotly.io as pio
+pio.kaleido.scope.mathjax = None
 
 # Janelas reais de plantio por cultura
 janela_plantio = {
