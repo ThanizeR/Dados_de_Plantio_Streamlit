@@ -8,8 +8,6 @@ from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.lib.pagesizes import A4
 from reportlab.lib import colors
 from reportlab.lib.units import cm
-import locale
-
 from reportlab.platypus import (
     SimpleDocTemplate, Paragraph, Spacer, Image,
     Table, TableStyle, PageBreak
@@ -21,12 +19,6 @@ from reportlab.lib.units import cm
 import os
 from datetime import datetime
 from reportlab.lib.styles import ParagraphStyle
-
-# força formatação pt-BR
-try:
-    locale.setlocale(locale.LC_ALL, "pt_BR.UTF-8")
-except:
-    locale.setlocale(locale.LC_ALL, "Portuguese_Brazil.1252")
 
 # Janelas reais de plantio por cultura
 janela_plantio = {
