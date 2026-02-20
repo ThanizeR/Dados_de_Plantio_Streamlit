@@ -626,7 +626,7 @@ fig_soja_scatter = aplicar_formato_ptbr(fig_soja_scatter, casas_decimais=2)
 fig_soja_scatter = estilizar_figura_pdf(fig_soja_scatter)
 st.plotly_chart(fig_soja_scatter, use_container_width=True)
 
-salvar_grafico(fig_soja_scatter, "grafico_soja_scatter.png")
+#salvar_grafico(fig_soja_scatter, "grafico_soja_scatter.png")
 
 fig_soja_bar = px.bar(
     area_mes_terco[
@@ -655,7 +655,7 @@ fig_soja_bar = aplicar_formato_ptbr(fig_soja_bar, casas_decimais=2)
 fig_soja_bar = estilizar_figura_pdf(fig_soja_bar)
 
 st.plotly_chart(fig_soja_bar, use_container_width=True)
-salvar_grafico(fig_soja_bar, "grafico_soja_bar.png")
+#salvar_grafico(fig_soja_bar, "grafico_soja_bar.png")
 
 
 
@@ -692,7 +692,7 @@ fig_arroz_scatter = aplicar_formato_ptbr(fig_arroz_scatter, casas_decimais=2)
 fig_arroz_scatter = estilizar_figura_pdf(fig_arroz_scatter)
 st.plotly_chart(fig_arroz_scatter, use_container_width=True)
 
-salvar_grafico(fig_arroz_scatter, "grafico_arroz_scatter.png")
+#salvar_grafico(fig_arroz_scatter, "grafico_arroz_scatter.png")
 
 
 fig_arroz_bar = px.bar(
@@ -721,7 +721,7 @@ fig_arroz_bar.update_layout(
 fig_arroz_bar = estilizar_figura_pdf(fig_arroz_bar)
 
 st.plotly_chart(fig_arroz_bar, use_container_width=True)
-salvar_grafico(fig_arroz_bar, "grafico_arroz_bar.png")
+#salvar_grafico(fig_arroz_bar, "grafico_arroz_bar.png")
 
 
 periodo = "todos os anos" if ano_sel == "TODOS" else f"o ano de {ano_sel}"
@@ -888,7 +888,7 @@ fig_colheita = aplicar_formato_ptbr(fig_colheita, casas_decimais=2)
 fig_colheita = estilizar_figura_pdf(fig_colheita)
 
 st.plotly_chart(fig_colheita, use_container_width=True)
-salvar_grafico(fig_colheita, "grafico_colheita.png")
+#salvar_grafico(fig_colheita, "grafico_colheita.png")
 
 
 
@@ -1025,7 +1025,7 @@ fig_gantt.update_traces(
 fig_gantt = aplicar_formato_ptbr(fig_gantt, casas_decimais=2)
 fig_gantt = estilizar_figura_pdf(fig_gantt)
 st.plotly_chart(fig_gantt, use_container_width=True)
-salvar_grafico(fig_gantt, "grafico_gantt.png")
+#salvar_grafico(fig_gantt, "grafico_gantt.png")
 
 
 st.markdown(f"""
@@ -1150,12 +1150,33 @@ st.dataframe(
 import os
 
 if st.button("📄 Gerar Relatório em PDF"):
-    pdf = gerar_pdf(df_plantio, df_colheita, ranking, org, periodo, cenario, inicio_min, fim_max, inicio_medio,fim_medio)
 
-    with open(pdf, "rb") as f:
-        st.download_button(
-            label="⬇️ Baixar PDF",
-            data=f,
-            file_name=pdf,
-            mime="application/pdf"
-        )
+        with st.spinner("Gerando PDF..."):
+
+            salvar_grafico(fig_soja_scatter, "grafico_soja_scatter.png")
+            salvar_grafico(fig_soja_bar, "grafico_soja_bar.png")
+            salvar_grafico(fig_arroz_scatter, "grafico_arroz_scatter.png")
+            salvar_grafico(fig_arroz_bar, "grafico_arroz_bar.png")
+            salvar_grafico(fig_colheita, "grafico_colheita.png")
+            salvar_grafico(fig_gantt, "grafico_gantt.png")
+
+            pdf = gerar_pdf(
+                df_plantio,
+                df_colheita,
+                ranking,
+                org,
+                periodo,
+                cenario,
+                inicio_min,
+                fim_max,
+                inicio_medio,
+                fim_medio
+            )
+
+            with open(pdf, "rb") as f:
+                st.download_button(
+                    label="⬇️ Baixar PDF",
+                    data=f,
+                    file_name=pdf,
+                    mime="application/pdf"
+                )
