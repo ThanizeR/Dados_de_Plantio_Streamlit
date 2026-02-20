@@ -84,13 +84,16 @@ def estilizar_figura_pdf(fig, titulo=None):
 
 
 def salvar_grafico(fig, caminho):
-    fig.write_image(
-        caminho,
-        format="png",
-        width=1600,
-        height=900,
-        scale=2
-    )
+    try:
+        fig.write_image(
+            caminho,
+            format="png",
+            width=1600,
+            height=900,
+            scale=2
+        )
+    except Exception as e:
+        print("Erro ao salvar gráfico:", e)
 
 from reportlab.lib.pagesizes import A4
 
